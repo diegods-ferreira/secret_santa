@@ -40,8 +40,12 @@ class SweepstakePeopleController {
         return response.status(400).json({ message: 'Sweepstake not found.' });
       }
 
+      if (sweepstakeExist.status === 1) {
+        return response.status(400).json({ message: 'Sweepstake is already closed.' });
+      }
+
       const emailExist = await knex('sweepstakes_people')
-        .where('email', email)
+        .where({ email, sweepstake_id })
         .first();
 
       if (emailExist) {
