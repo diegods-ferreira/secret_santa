@@ -69,8 +69,18 @@ class SweepstakePeopleController {
     const { id } = request.params;
 
     try {
+      const peopleExist = await knex('sweepstakes_people')
+        .where('id', id)
+        .first();
+
+      if (!peopleExist) {
+        return response.status(400).json({ message: 'This person doesn\'t exist.' });
+      }
+
       const emailExist = await knex('sweepstakes_people')
         .where('email', email)
+        .andWhere('sweepstake_id', peopleExist.sweepstake_id)
+        .andWhereNot('id', peopleExist.id)
         .first();
 
       if (emailExist) {
@@ -94,6 +104,14 @@ class SweepstakePeopleController {
     const { id } = request.params;
 
     try {
+      const peopleExist = await knex('sweepstakes_people')
+        .where('id', id)
+        .first();
+
+      if (!peopleExist) {
+        return response.status(400).json({ message: 'This person doesn\'t exist.' });
+      }
+
       await knex('sweepstakes_people').where('id', id).delete();
       return response.status(200).send();
     } catch (err) {
