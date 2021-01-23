@@ -63,32 +63,6 @@ class SweepstakesController {
     }    
   }
 
-  async update(request: Request, response: Response) {
-    const { title, description } = request.body;
-    const { id } = request.params;
-
-    try {
-      const sweepstakeExist = await knex('sweepstakes')
-        .where('id', id)
-        .first();
-
-      if (!sweepstakeExist) {
-        return response.status(400).json({ message: 'Sweepstake not found.' });
-      }
-
-      const updatedSweepstake = await knex('sweepstakes')
-        .where('id', id)
-        .update({
-          title,
-          description,
-        }, ['*']);
-
-      return response.json(updatedSweepstake[0]);
-    } catch (err) {
-      return response.status(500).json({ message: 'Internal server error' })
-    }
-  }
-
   async delete(request: Request, response: Response) {
     const { id } = request.params;
 

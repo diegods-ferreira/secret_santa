@@ -12,22 +12,6 @@ class SweepstakePeopleController {
     }
   }
 
-  async show(request: Request, response: Response) {
-    const { id } = request.params;
-
-    try {
-      const people = await knex('sweepstakes_people').where('id', id).first();
-
-      if (!people) {
-        return response.status(400).json({ message: 'Person not found.' });
-      }
-      
-      return response.json(people);
-    } catch (err) {
-      return response.status(500).json({ message: 'Internal server error' })
-    }
-  }
-
   async create(request: Request, response: Response) {
     const { name, email, sweepstake_id } = request.body;
 
